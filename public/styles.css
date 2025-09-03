@@ -2,6 +2,7 @@ body {
      padding: 20px;
      background-color: #f8f9fa;
      font-family: 'Poppins', sans-serif;
+     dirtection :  rtl; 
 }
  .container {
      background-color: #ffffff;
