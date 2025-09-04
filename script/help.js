@@ -5,7 +5,7 @@ module.exports.config = {
   hasPrefix: true,
   aliases: ['معلومات'],
   description: "دليل المبتدئين",
-  usage: "مساعدة [رقم الصفحة] أو [اسم الأمر]",
+  usage: "اوامر [رقم الصفحة] أو [اسم الأمر]",
   credits: 'Rako San',
 };
 
@@ -17,80 +17,81 @@ module.exports.run = async function({
   Utils,
   prefix
 }) {
-  const input = args.join(' ');
+  const input = args.join(' ').trim().toLowerCase();
+  const commands = enableCommands[0].commands;
+
   try {
-    const eventCommands = enableCommands[1].handleEvent;
-    const commands = enableCommands[0].commands;
+    const perPage = 20;
+    const totalPages = Math.ceil(commands.length / perPage);
 
     if (!input) {
-      const pages = 20;
-      let page = 1;
-      let start = (page - 1) * pages;
-      let end = start + pages;
-      let helpMessage = `📜 قائمة أوامر البوت:\n\n`;
-      for (let i = start; i < Math.min(end, commands.length); i++) {
-        helpMessage += `${i + 1}. ⟿ ${prefix}${commands[i]}\n`;
-}
-      helpMessage += `\n📌 قائمة الأحداث:\n\n`;
-      eventCommands.forEach((eventCommand, index) => {
-        helpMessage += `${index + 1}. ⟿ ${prefix}${eventCommand}\n`;
-});
-      helpMessage += `\nصفحة ${page}/${Math.ceil(commands.length / pages)}. لعرض صفحة أخرى، اكتب '${prefix}اوامر رقم الصفحة'. لعرض معلومات أمر معين، اكتب '${prefix}اوامر اسم الأمر'.`;
-      api.sendMessage(helpMessage, event.threadID, event.messageID);
+      const page = 1;
+      const start = (page - 1) * perPage;
+      const end = start + perPage;
 
-} else if (!isNaN(input)) {
+      let helpMessage = `◆━━━━━━━◈━━━━━━━◆\n\n`;
+      for (let i = start; i < Math.min(end, commands.length); i++) {
+        helpMessage += `〖${i + 1}〗🔹 ${prefix}${commands[i]}\n`;
+}
+
+      helpMessage += `◆━━━━━━━◈━━━━━━━◆\nصفحة ${page}/${totalPages}. لعرض صفحة أخرى، اكتب '${prefix}اوامر رقم الصفحة'. لعرض معلومات أمر معين، اكتب '${prefix}اوامر اسم الأمر'. \n◆━━━━━━━◈━━━━━━━◆`;
+      return api.sendMessage(helpMessage, event.threadID, event.messageID);
+}
+
+    if (!isNaN(input)) {
       const page = parseInt(input);
-      const pages = 20;
-      let start = (page - 1) * pages;
-      let end = start + pages;
-      let helpMessage = `📜 قائمة أوامر البوت:\n\n`;
-      for (let i = start; i < Math.min(end, commands.length); i++) {
-        helpMessage += `${i + 1}. ⟿ ${prefix}${commands[i]}\n`;
+      if (page < 1 || page> totalPages) {
+        return api.sendMessage(`❌ رقم الصفحة غير صالح. اختر بين 1 و ${totalPages}.`, event.threadID, event.messageID);
 }
-      helpMessage += `\n📌 قائمة الأحداث:\n\n`;
-      eventCommands.forEach((eventCommand, index) => {
-      helpMessage += `${index + 1}. ⟿ ${prefix}${eventCommand}\n`;
-});
-      helpMessage += `\nصفحة ${page} من ${Math.ceil(commands.length / pages)}`;
-      api.sendMessage(helpMessage, event.threadID, event.messageID);
 
-} else {
-      const command = [...Utils.handleEvent,...Utils.commands].find(([key]) => key.includes(input?.toLowerCase()))?.[1];
-      if (command) {
-        const {
-          name,
-          version,
-          role,
-          aliases = [],
-          description,
-          usage,
-          credits,
-          cooldown,
-          hasPrefix
+      const start = (page - 1) * perPage;
+      const end = start + perPage;
+
+      let helpMessage = `◆━━━━━━━━◈━━━━━━━━◆\n\n`;
+      for (let i = start; i < Math.min(end, commands.length); i++) {
+        helpMessage += `〖${i + 1}〗 🔹${prefix}${commands[i]}\n`;
+}
+
+      helpMessage += `\n◆━━━━━━━◈━━━━━━━◆\n [🔹]  صفحة ❴${page}/${totalPages}❵\n◆━━━━━━━◈━━━━━━━◆`;
+      return api.sendMessage(helpMessage, event.threadID, event.messageID);
+}
+
+    const command = [...Utils.commands].find(([key]) => key.includes(input))?.[1];
+    if (command) {
+      const {
+        name,
+        version,
+        role,
+        aliases = [],
+        description,
+        usage,
+        credits,
+        cooldown,
+        hasPrefix
 } = command;
 
-        const roleMessage = role!== undefined? (
-          role === 0? '➛ الصلاحية: عضو':
-          role === 1? '➛ الصلاحية: ادمن البوت':
-          role === 2? '➛ الصلاحية: أدمن المجموعة':
-          role === 3? '➛ الصلاحية: المطور الأعلى': ''
+      const roleMessage = role!== undefined? (
+        role === 0? '➛ الصلاحية: عضو':
+        role === 1? '➛ الصلاحية: أدمن البوت':
+        role === 2? '➛ الصلاحية: أدمن المجموعة':
+        role === 3? '➛ الصلاحية: المطور الأعلى': ''
 ): '';
 
-        const aliasesMessage = aliases.length? `➛ الأسماء البديلة: ${aliases.join(', ')}\n`: '';
-        const descriptionMessage = description? `➛ الوصف: ${description}\n`: '';
-        const usageMessage = usage? `➛ الاستخدام: ${usage}\n`: '';
-        const creditsMessage = credits? `➛ المطور: ${credits}\n`: '';
-        const versionMessage = version? `➛ الإصدار: ${version}\n`: '';
-        const cooldownMessage = cooldown? `➛ التبريد: ${cooldown} ثانية\n`: '';
+      const aliasesMessage = aliases.length? `➛ الأسماء البديلة: ${aliases.join(', ')}\n`: '';
+      const descriptionMessage = description? `➛ الوصف: ${description}\n`: '';
+      const usageMessage = usage? `➛ الاستخدام: ${usage}\n`: '';
+      const creditsMessage = credits? `➛ المطور: ${credits}\n`: '';
+      const versionMessage = version? `➛ الإصدار: ${version}\n`: '';
+      const cooldownMessage = cooldown? `➛ التبريد: ${cooldown} ثانية\n`: '';
 
-        const message = `「 معلومات الأمر 」\n\n➛ الاسم: ${name}\n${versionMessage}${roleMessage}\n${aliasesMessage}${descriptionMessage}${usageMessage}${creditsMessage}${cooldownMessage}`;
-        api.sendMessage(message, event.threadID, event.messageID);
+      const message = `「 معلومات الأمر 」\n\n➛ الاسم: ${name}\n${versionMessage}${roleMessage}\n${aliasesMessage}${descriptionMessage}${usageMessage}${creditsMessage}${cooldownMessage}`;
+      return api.sendMessage(message, event.threadID, event.messageID);
 } else {
-        api.sendMessage('❌ لم يتم العثور على الأمر المطلوب.', event.threadID, event.messageID);
-}
+      return api.sendMessage('❌ لم يتم العثور على الأمر المطلوب.', event.threadID, event.messageID);
 }
 } catch (error) {
-    console.log(error);
+    console.error(error);
+    return api.sendMessage('❌ حدث خطأ أثناء معالجة الأمر.', event.threadID, event.messageID);
 }
 };
 
@@ -100,8 +101,11 @@ module.exports.handleEvent = async function({
   prefix
 }) {
   const { threadID, messageID, body} = event;
-  const message = prefix? ` البادئة الحالية للنظام:\n بادئة المحادثة: ${prefix}`: "عذرًا، لا توجد بادئة محددة.";
   if (body?.toLowerCase().startsWith('prefix')) {
+    const message = prefix
+? ` البادئة الحالية للنظام:\n بادئة المحادثة: ${prefix}`
+: "عذرًا، لا توجد بادئة محددة.";
     api.sendMessage(message, threadID, messageID);
 }
 };
+
