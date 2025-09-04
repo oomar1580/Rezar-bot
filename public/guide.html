@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -10,12 +11,25 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Handjet:wght@100..900&family=Playpen+Sans+Arabic:wght@100..800&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f8f9fa;
       direction: rtl;
       text-align: right;
+      
+.handjet-<uniquifier> {
+  font-family: "Handjet", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-variation-settings:
+    "ELGR" 1,
+    "ELSH" 2;
+}
 }
 .sidebar {
       background: linear-gradient(to bottom, #007bff, #0056b3);
@@ -67,17 +81,22 @@
       margin-top: 40px;
 }
     #menuToggle {
-      position: fixed;
+      position: absolute;
       top: 15px;
       left: 15px;
       z-index: 1000;
+      font-size: 22px;
+      font-weight: bold;
+      color: #007bff;
+      background: none;
+      border: none;
+      animation: fadeInUp 1s ease-out;
+      display: none; 
 }
   </style>
 </head>
 <body>
-  <button class="btn btn-light d-md-none" id="menuToggle">
-    <i class="fas fa-bars"></i>
-  </button>
+  <button class="d-md-none" id="menuToggle">Rako San</button>
 
   <div class="container-fluid">
     <div class="row">
@@ -95,66 +114,28 @@
 
       <!-- Main Content -->
       <main class="col-md-9 p-4">
-        <h2 class="header-logo text-center">📘 دليل خطوة بخطوة</h2>
+        <h2 class="header-logo text-center"> دليل خطوة بخطوة</h2>
 
         <!-- خطوات الدليل -->
         <div id="guideSteps">
-          <!-- كل خطوة داخل كرت -->
           <div class="step-card">
-            <p>١. قم بتثبيت متصفح Kiwi من متجر Google Play ثم قم بتشغيل التطبيق.</p>
             <img src="image/guide_1.jpeg" alt="الخطوة ١">
           </div>
           <div class="step-card">
-            <p>٢. أدخل الرابط التالي في البحث: <a href="https://github.com/c3cbot/c3c-fbstate/archive/refs/tags/1.5.zip">تحميل الإضافة</a></p>
+            <a href="https://github.com/c3cbot/c3c-fbstate/archive/refs/tags/1.5.zip" class="btn btn-primary btn-block" target="_blank">اضغط هنا لتحميل الإضافة</a>
             <img src="image/guide_2.jpeg" alt="الخطوة ٢">
           </div>
-          <div class="step-card">
-            <img src="image/guide_2.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٣. بعد الإدخال، ستظهر مطالبة تطلب منك تنزيل الملف؛ تابع بالنقر على خيار التنزيل.</p>
-          </div>
-          <div class="step-card">
- <img src="image/guide_3.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٤. بعد اكتمال التنزيل، اضغط على الثلاث نقاط في الزاوية اليمنى العليا، ثم اختر خيار "الإضافات".</p>
-          </div>
-          <div class="step-card">
-         <img src="image/guide_4.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٥. في قائمة الإضافات، قم بتمكين وضع المطور، ثم انقر على زر "+" لإضافة الإضافة من ملف zip أو crx أو user.js.</p>
-          </div>
-          <div class="step-card">
-            <img src="image/guide_5.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٦. حدد ملف zip الذي تم تنزيله مسبقًا وانقر عليه لبدء عملية التثبيت.</p>
-          </div>
-          <div class="step-card">
-     <img src="image/guide_6.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٧. بعد اكتمال التثبيت، راقب أداة C3C fbstate في الزاوية اليمنى السفلى وقم بتفعيلها بالنقر عليها.</p>
-          </div>
-          <div class="step-card">
-                    <img src="image/guide_7.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٨. بعد التفعيل، انتقل إلى Facebook.com باستخدام متصفح Kiwi وقم بتسجيل الدخول إلى حسابك.</p>
-          </div>
-          <div class="step-card">
-<img src="image/guide_8.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٩. بعد تسجيل الدخول، افتح القائمة بالنقر على الثلاث نقاط في الزاوية اليمنى العليا، ثم مرر للأسفل وابحث عن أداة C3C fbstate.</p>
-          </div>
-          <div class="step-card">
-         <img src="image/guide_9.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>١٠. سيتم توجيهك إلى صفحة أخرى؛ ابحث عن خيار "نسخ إلى الحافظة" وانقر عليه لنسخ الكوكيز الخاصة بك للاستخدام لاحقًا.</p>
-          </div>
-          <div class="step-card">
-         <img src="image/guide_10.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>١١. الصق الكوكيز المنسوخة في <a href="https://razer-bot-soyeon.onrender.com">https://razer-bot-soyeon.onrender.com</a>، ثم مرر للأسفل لمراجعة الشروط وسياسة الخصوصية بعناية.</p>
-          </div>
-          <div class="step-card">
-         <img src="image/guide_11.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>١٢. بعد مراجعة الشروط وسياسة الخصوصية بعناية، حدد المربع لتأكيد فهمك ثم أرسل المعلومات.</p>
-          </div>
-        
-          <!-- كرر نفس الهيكل لباقي الخطوات -->
-          <!--... -->
-          <div class="step-card">
-            <p>١٣. أدخل "اوامر" لتأكيد حالة تشغيل البوت. إذا استجاب، تهانينا على التحقق الناجح.</p>
-            <img src="image/guide_13.jpeg" alt="الخطوة ١٣">
-          </div>
+     
+          <div class="step-card"><img src="image/guide_3.jpeg" alt=""></div>
+          <div class="step-card"><img src="image/guide_4.jpeg" alt=""></div>
+          <div class="step-card"><img src="image/guide_5.jpeg" alt=""></div>
+          <div class="step-card"><img src="image/guide_6.jpeg" alt=""></div>
+          <div class="step-card"><img src="image/guide_7.jpeg" alt=""></div>
+          <div class="step-card"><img src="image/guide_8.jpeg" alt=""></div>
+<div class="step-card"><img src="image/guide_9.jpeg" alt=""></div>
+          <div class="step-card"><img src="image/guide_10.jpeg" alt=""></div>
+          <div class="step-card"><img src="image/guide_11.jpeg" alt=""></div>
+          <div class="step-card"><img src="image/guide_13.jpeg" alt=""></div>
         </div>
 
         <!-- ملاحظات -->
@@ -165,9 +146,10 @@
             <li>تجنب تسجيل الدخول من أجهزة متعددة أثناء تشغيل البوت.</li>
             <li>لا تغيّر كلمة المرور أثناء تشغيل البوت.</li>
             <li>نحن غير مسؤولين عن حالات القفل أو التعليق.</li>
-            <li>لتسجيل بوت جديد، استخدم "تسجيل الخروج" فقط.</li>
+            <li>المشروع جديد وقيد  التطوير .</li>
+            <li>  مع تحيات العم  <a href="https://facebook.com/Rako.San.r.s">Rako San</a></li>
           </ul>
-          <img src="image/guide_16.jpeg" alt="ملاحظة إضافية" style="width: 100%; border-radius: 10px; margin-top: 10px;">
+         
         </div>
       </main>
     </div>
@@ -178,11 +160,6 @@
   </div>
 
   <!-- Scripts -->
-  <script>
-    document.getElementById("menuToggle").addEventListener("click", () => {
-      document.getElementById("sidebar").classList.toggle("hidden");
-});
-  </script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
