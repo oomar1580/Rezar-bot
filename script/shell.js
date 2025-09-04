@@ -5,7 +5,7 @@ const axios = require("axios");
 module.exports.config = {
   name: 'شيل',
   version: '1.0.0',
-  role: 3,
+  role: 2,
   hasPrefix: true,
   aliases: ['shell', 'ملفات'],
   description: "أوامر إدارة الملفات داخل البوت",

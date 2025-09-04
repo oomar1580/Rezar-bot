@@ -1,42 +1,51 @@
 module.exports.config = {
-  name: "تخيل",
-  version: "1.0.0",
-  role: 0,
-  hasPrefix: true,
-  credits: "Rako San",
-  description: "توليد صورة باستخدام خدمة polination",
-  usages: "توليد-صورة [الوصف]",
-  cooldowns: 5,
+  name: "ارسمي",
+  version: "1.0.1",
+  hasPermission: 0,
+  credits: "MIRAI-AMINUL",
+  description: "Generate an image based on your prompt using Pollinations AI",
+  commandCategory: "user",
+  usages: "poli [text]",
+  cooldowns: 2
 };
 
-module.exports.run = async ({ api, event, args}) => {
-  const axios = require('axios');
-  const fs = require('fs-extra');
+module.exports.languages = {
+  en: {
+    missingInput: "ارسم ليك شنو يعثل 🙋‍♀️",
+    replySuccess: "هاك صورتك. يا عثل "
+  },
+  vi: {
+    missingInput: "⚠️ | Vui lòng nhập nội dung để tạo hình ảnh.",
+    replySuccess: "✨ Đây là hình ảnh AI bạn yêu cầu:"
+  }
+};
+
+module.exports.run = async ({ api, event, args, getText }) => {
+  const axios = require("axios");
+  const fs = require("fs-extra");
+  const path = require("path");
+
+  const { threadID, messageID } = event;
+  const prompt = args.join(" ");
+
+  if (!prompt) return api.sendMessage(getText("missingInput"), threadID, messageID);
+
+  const imagePath = path.join(__dirname, "cache", `poli_${Date.now()}.png`);
+
   try {
-    const { threadID, messageID} = event;
-    const query = args.join(" ");
-    const time = new Date();
-    const timestamp = time.toISOString().replace(/[:.]/g, "-");
-    const path = __dirname + '/cache/' + `${timestamp}_tid.png`;
+    const response = await axios.get(`https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}`, {
+      responseType: "arraybuffer"
+    });
 
-    if (!query) return api.sendMessage("يرجى إدخال وصف الصورة المطلوب توليدها.", threadID, messageID);
+    fs.writeFileSync(imagePath, Buffer.from(response.data, "utf-8"));
 
-    api.sendMessage(`جاري البحث عن: ${query}`, threadID, messageID);
+    api.sendMessage({
+      body: getText("replySuccess"),
+      attachment: fs.createReadStream(imagePath)
+    }, threadID, () => fs.unlinkSync(imagePath), messageID);
 
-    const poli = (await axios.get(`https://image.pollinations.ai/prompt/${encodeURIComponent(query)}`, {
-      responseType: "arraybuffer",
-})).data;
-
-    fs.writeFileSync(path, Buffer.from(poli, "utf-8"));
-
-    setTimeout(() => {
-      api.sendMessage({
-        body: "✅ تم تحميل الصورة بنجاح!",
-        attachment: fs.createReadStream(path)
-}, threadID, () => fs.unlinkSync(path));
-}, 5000);
-
-} catch (error) {
-    api.sendMessage(`حدث خطأ: ${error.message}`, event.threadID, event.messageID);
-}
+  } catch (error) {
+    console.error("❌ Error fetching image from Pollinations:", error.message);
+    api.sendMessage("❌ | Failed to generate image. Please try again later.", threadID, messageID);
+  }
 };
