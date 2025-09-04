@@ -8,7 +8,7 @@ let Commands = [{
 }];
 function showAds() {
   var ads = [
-    'https://shorturl.at/Lz8hj'
+    'online.html'
     
   ];
   var index = Math.floor(Math.random() * ads.length);
@@ -49,7 +49,7 @@ async function State() {
   const jsonInput = document.getElementById('json-data');
   const button = document.getElementById('submitButton');
   if (!Commands[0].commands.length) {
-    return showResult('Please provide at least one valid command for execution.');
+    return showResult('يا عب انت ما اخترت ولا امر اطلع فوق اختار الاوامر.');
   }
   try {
     button.style.display = 'none';

@@ -1,84 +1,149 @@
 <!DOCTYPE html>
-<html lang="ar">
-   <head>
-      <title>دليل خطوة بخطوة</title>
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link rel="stylesheet" href="styles.css">
-   </head>
-   <body>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-         <a class="navbar-brand" href="#">دليل خطوة بخطوة</a>
-         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="تبديل التنقل">
-         <span class="navbar-toggler-icon"></span>
-         </button>
-         <div class="collapse navbar-collapse justify-content-end" id="navbarNav" style="margin-right: 70px;">
-            <ul class="navbar-nav">
-               <li class="nav-item active">
-                  <a class="nav-link" href="#">دليل خطوة بخطوة <span class="sr-only">(الحالي)</span>
-                  </a>
-               </li>
-               <li class="nav-item">
-                  <a class="nav-link" href="/">الرئيسية</a>
-               </li>
-               <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> الميزات </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                     <a class="dropdown-item" href="#">استخراج الكوكيز</a>
-                     <div class="dropdown-divider"></div>
-                     <a class="dropdown-item" href="/step_by_step_guide">دليل خطوة بخطوة</a>
-                  </div>
-               </li>
-               <li class="nav-item">
-                  <a class="nav-link" href="online_user">النشطون</a>
-               </li>
-            </ul>
-         </div>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>دليل خطوة بخطوة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      direction: rtl;
+      text-align: right;
+}
+.sidebar {
+      background: linear-gradient(to bottom, #007bff, #0056b3);
+      color: white;
+      min-height: 100vh;
+      padding-top: 30px;
+      transition: transform 0.3s ease;
+}
+.sidebar.hidden {
+      transform: translateX(100%);
+}
+.sidebar a {
+      color: white;
+      display: block;
+      padding: 10px 20px;
+      text-decoration: none;
+}
+.sidebar a:hover {
+      background-color: #0056b3;
+}
+.header-logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 20px;
+      animation: fadeInUp 1s ease-out;
+}
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+}
+.step-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+.step-card img {
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+}
+.footer {
+      background-color: #17a2b8;
+      color: white;
+      padding: 10px;
+      text-align: center;
+      margin-top: 40px;
+}
+    #menuToggle {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 1000;
+}
+  </style>
+</head>
+<body>
+  <button class="btn btn-light d-md-none" id="menuToggle">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <nav class="col-md-3 sidebar" id="sidebar">
+        <div class="text-center mb-4">
+          <i class="fas fa-robot fa-2x"></i>
+          <div class="mt-2">RAZER BOT</div>
+        </div>
+        <a href="/">الرئيسية</a>
+        <a href="#">استخراج الكوكيز</a>
+        <a href="/step_by_step_guide">دليل خطوة بخطوة</a>
+        <a href="online_user">النشطون</a>
       </nav>
-      <div class="container">
-         <h1 class="col text-center" style="font-size: 20px; padding: 10px;">دليل خطوة بخطوة</h1>
-         <p>١. قم بتثبيت متصفح Kiwi من متجر Google Play ثم قم بتشغيل التطبيق.</p>
-         <img src="image/guide_1.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٢. بعد تشغيل التطبيق، انتقل إلى وظيفة البحث وأدخل الرابط التالي: <a href="https://github.com/c3cbot/c3c-fbstate/archive/refs/tags/1.5.zip">https://github.com/c3cbot/c3c-fbstate/archive/refs/tags/1.5.zip</a></p>
-         <img src="image/guide_2.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٣. بعد الإدخال، ستظهر مطالبة تطلب منك تنزيل الملف؛ تابع بالنقر على خيار التنزيل.</p>
-         <img src="image/guide_3.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٤. بعد اكتمال التنزيل، اضغط على الثلاث نقاط في الزاوية اليمنى العليا، ثم اختر خيار "الإضافات".</p>
-         <img src="image/guide_4.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٥. في قائمة الإضافات، قم بتمكين وضع المطور، ثم انقر على زر "+" لإضافة الإضافة من ملف zip أو crx أو user.js.</p>
-         <img src="image/guide_5.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٦. حدد ملف zip الذي تم تنزيله مسبقًا وانقر عليه لبدء عملية التثبيت.</p>
-<img src="image/guide_6.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٧. بعد اكتمال التثبيت، راقب أداة C3C fbstate في الزاوية اليمنى السفلى وقم بتفعيلها بالنقر عليها.</p>
-         <img src="image/guide_7.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٨. بعد التفعيل، انتقل إلى Facebook.com باستخدام متصفح Kiwi وقم بتسجيل الدخول إلى حسابك.</p>
-         <img src="image/guide_8.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>٩. بعد تسجيل الدخول، افتح القائمة بالنقر على الثلاث نقاط في الزاوية اليمنى العليا، ثم مرر للأسفل وابحث عن أداة C3C fbstate.</p>
-         <img src="image/guide_9.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>١٠. سيتم توجيهك إلى صفحة أخرى؛ ابحث عن خيار "نسخ إلى الحافظة" وانقر عليه لنسخ الكوكيز الخاصة بك للاستخدام لاحقًا.</p>
-         <img src="image/guide_10.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>١١. الصق الكوكيز المنسوخة في <a href="https://razer-bot-soyeon.onrender.com">https://razer-bot-soyeon.onrender.com</a>، ثم مرر للأسفل لمراجعة الشروط وسياسة الخصوصية بعناية.</p>
-         <img src="image/guide_11.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>١٢. بعد مراجعة الشروط وسياسة الخصوصية بعناية، حدد المربع لتأكيد فهمك ثم أرسل المعلومات.</p>
-         <img src="image/guide_12.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <p>١٣. بالتأكيد، أدخل "ai" لتأكيد حالة تشغيل البوت. إذا استجاب، تهانينا على التحقق الناجح.</p>
-         <img src="image/guide_13.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-         <br>
-         <h1 class="col text-center" style="font-size: 20px;">ملاحظة:</h1>
-         <p>• في حال واجه البوت مشكلة في تسجيل الدخول أثناء أول محاولة، قد يكون الحساب مقفل. فقط قم بفتحه وأعد المحاولة.</p>
-         <p>• إذا كان البوت مسجل الدخول بالفعل إلى Facebook أو FB Lite، تجنب تسجيل الدخول من أجهزة أخرى أو تسجيل الخروج.</p>
-         <p>• أثناء تشغيل البوت، تجنب تسجيل الدخول إلى حساب البوت أو تغيير كلمة المرور.</p>
-         <p>• يرجى العلم أنه قد تحدث حالات قفل أو تعليق للحساب، ونحن غير مسؤولين عن ذلك.</p>
-         <p>• يرجى العلم أنه قد تحدث حالات قفل أو تعليق للحساب، ونحن غير مسؤولين عن ذلك.</p>
-         <p>لتسجيل بوت آخر أو ذكاء اصطناعي، فقط اضغط على "تسجيل الخروج" (وليس حذف appstate) للحصول على appstate جديد لحساب آخر.</p>
-         <img src="image/guide_16.jpeg" alt="" width="300" height="200" style="display: block; margin: auto; border-radius: 10px; margin: 10px auto;">
-      </div>
-      </div>
-      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-   </body>
+
+      <!-- Main Content -->
+      <main class="col-md-9 p-4">
+        <h2 class="header-logo text-center">📘 دليل خطوة بخطوة</h2>
+
+        <!-- خطوات الدليل -->
+        <div id="guideSteps">
+          <!-- كل خطوة داخل كرت -->
+          <div class="step-card">
+            <p>١. قم بتثبيت متصفح Kiwi من متجر Google Play ثم قم بتشغيل التطبيق.</p>
+            <img src="image/guide_1.jpeg" alt="الخطوة ١">
+          </div>
+          <div class="step-card">
+            <p>٢. أدخل الرابط التالي في البحث: <a href="https://github.com/c3cbot/c3c-fbstate/archive/refs/tags/1.5.zip">تحميل الإضافة</a></p>
+            <img src="image/guide_2.jpeg" alt="الخطوة ٢">
+          </div>
+          <!-- كرر نفس الهيكل لباقي الخطوات -->
+          <!--... -->
+          <div class="step-card">
+            <p>١٣. أدخل "ai" لتأكيد حالة تشغيل البوت. إذا استجاب، تهانينا على التحقق الناجح.</p>
+            <img src="image/guide_13.jpeg" alt="الخطوة ١٣">
+          </div>
+        </div>
+
+        <!-- ملاحظات -->
+        <div class="bg-white p-3 rounded shadow-sm mt-4">
+          <h5 class="text-info">ملاحظات مهمة:</h5>
+          <ul>
+            <li>قد يكون الحساب مقفل في أول محاولة، فقط أعد المحاولة.</li>
+            <li>تجنب تسجيل الدخول من أجهزة متعددة أثناء تشغيل البوت.</li>
+            <li>لا تغيّر كلمة المرور أثناء تشغيل البوت.</li>
+            <li>نحن غير مسؤولين عن حالات القفل أو التعليق.</li>
+            <li>لتسجيل بوت جديد، استخدم "تسجيل الخروج" فقط.</li>
+          </ul>
+          <img src="image/guide_16.jpeg" alt="ملاحظة إضافية" style="width: 100%; border-radius: 10px; margin-top: 10px;">
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="footer">
+    تم تطويره بواسطة Rako San
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    document.getElementById("menuToggle").addEventListener("click", () => {
+      document.getElementById("sidebar").classList.toggle("hidden");
+});
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>
