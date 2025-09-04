@@ -1,47 +1,30 @@
-const axios = require('axios');
-const fs = require('fs');
+const axios = require("axios");
+
 module.exports.config = {
-  name: 'انمي',
-  version: '1.0.0',
-  role: 0,
-  hasPrefix: true,
-  aliases: ['هانمي'],
-  description: 'جلب صورة أنمي عشوائية',
-  usage: "انمي [الفئة - النوع]",
-  credits: 'Rako San',
-  cooldown: 5,
+  name: "انمي",
+  version: "1.0",
+  hasPermission: 0,
+  credits: "Rako San ",
+  description: "يرسل صورة أنمي عشوائية",
+  commandCategory: "صــــــور",
+  usages: "",
+  cooldowns: 5
 };
-module.exports.run = async function({
-  api,
-  event,
-  args
-}) {
+
+module.exports.run = async function({ api, event}) {
+  const { threadID, messageID} = event;
+
   try {
-    const input = args.join(' ');
-    if (!input) {
-      const message = `إليك قائمة فئات صور الأنمي:\n\nالفئة: nsfw\nالأنواع:\n• waifu\n• neko\n• trap\n• blowjob\n\nالفئة: sfw\nالأنواع:\n• waifu\n• neko\n• shinobu\n• megumin\n• bully\n• cuddle\n• cry\n• hug\n• awoo\n• kiss\n• lick\n• pat\n• smug\n• bonk\n• yeet\n• blush\n• smile\n• wave\n• highfive\n• handhold\n• nom\n• bite\n• glomp\n• slap\n• kill\n• kick\n• happy\n• wink\n• poke\n• dance\n• cringe\n\nالاستخدام: انمي الفئة - النوع`;
-      api.sendMessage(message, event.threadID, event.messageID);
-} else {
-      const split = input.split('-').map(item => item.trim());
-      const choice = split[0];
-      const category = split[1];
-      const time = new Date();
-      const timestamp = time.toISOString().replace(/[:.]/g, "-");
-      const pathPic = __dirname + '/cache/' + `${timestamp}_waifu.png`;
-      const {
-        data
-} = await axios.get(`https://api.waifu.pics/${choice}/${category}`);
-      const picture = data.url;
-      const getPicture = (await axios.get(picture, {
-        responseType: 'arraybuffer'
-})).data;
-      fs.writeFileSync(pathPic, Buffer.from(getPicture, 'utf-8'));
-      api.sendMessage({
-        body: '',
-        attachment: fs.createReadStream(pathPic)
-}, event.threadID, () => fs.unlinkSync(pathPic), event.messageID);
-}
-} catch (error) {
-    api.sendMessage(`حدث خطأ في أمر الانمي: ${error.message}`);
+    const res = await axios.get("https://rapido.zetsu.xyz/api/anime-photo", {
+      responseType: "stream"
+});
+
+    return api.sendMessage({
+      body: "📸 صورة أنمي عشوائية:",
+      attachment: res.data
+}, threadID, messageID);
+} catch (err) {
+    console.error("❌ خطأ في جلب صورة الأنمي:", err.message);
+    return api.sendMessage("⚠️ حصلت مشكلة في تحميل الصورة، جرب لاحقًا.", threadID, messageID);
 }
 };

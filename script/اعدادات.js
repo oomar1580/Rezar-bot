@@ -27,14 +27,14 @@ const saveActiveGroups = () => {
 };
 
 module.exports.config = {
- name: 'اعدادات',
-  version: '1.0.0',
-  role: 2,
-  hasPrefix: true,
-  aliases: ['حماية'],
-  description: "تشغيل أو إيقاف حماية المجموعة",
-  usage: "اعدادات تشغيل | اعدادات ايقاف",
-  credits: 'Rako San'
+ name: "اعدادات",
+ version: "1.1.0",
+ hasPermssion: 0,
+ credits: "Kibutsuji",
+ description: "منع التغييرات غير المصرح بها في الاسم، الصورة، والكنيات",
+ commandCategory: "الــمـطـور",
+ usages: "antichange [on/off]",
+ cooldowns: 5
 };
 
 this.run = async function({ api, event, args, Threads}) {
@@ -43,17 +43,14 @@ this.run = async function({ api, event, args, Threads}) {
  const isAdmin = threadInfo.adminIDs.some(admin => admin.id == senderID);
  const isBotAdmin = global.config.ADMINBOT.includes(senderID);
 
- if (!isAdmin &&!isBotAdmin) {
- return api.sendMessage("❌ هذا الأمر مخصص فقط للمشرفين أو مسؤولي البوت.", threadID);
-}
-
+ if (!global.config.ADMINBOT.includes(senderID)) return;
  const initialGroupName = threadInfo.threadName;
  const initialGroupImage = threadInfo.imageSrc || "https://i.imgur.com/HUS1nK8.png";
  const imagePath = path.join(imageBackupDir, `${threadID}.jpg`);
 
  const { getData, setData, delData} = Threads;
 
- if (args[0] === "تشغيل") {
+ if (args[0] === "on") {
  if (!activeGroups[threadID]) {
  // حفظ صورة المجموعة محليًا
  try {
@@ -84,7 +81,7 @@ this.run = async function({ api, event, args, Threads}) {
 } else {
  return api.sendMessage("⚠️ الحماية مفعّلة مسبقًا في هذه المجموعة.", threadID);
 }
-} else if (args[0] === "ايقاف") {
+} else if (args[0] === "off") {
  if (activeGroups[threadID]) {
  delete activeGroups[threadID];
 
@@ -99,6 +96,6 @@ this.run = async function({ api, event, args, Threads}) {
  return api.sendMessage("⚠️ الحماية غير مفعّلة حاليًا في هذه المجموعة.", threadID);
 }
 } else {
- return api.sendMessage("ما كدا يا دنقل .\n📝 استخدم:\n'اعدادات تشغيل' لتفعيل\n'اعدادات ايقاف' للإلغاء", threadID);
+ return api.sendMessage("❗ خيار غير صالح.\n📝 استخدم:\n'antichange on' لتفعيل\n'antichange off' للإلغاء", threadID);
 }
 };
