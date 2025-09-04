@@ -1,7 +1,18 @@
-import axios from 'axios';
-import fs from 'fs';
-import { join} from 'path';
-import { createCanvas, loadImage} from 'canvas';
+const axios = require("axios");
+const fs = require("fs-extra");
+const path = require("path");
+const { createCanvas, loadImage} = require("canvas");
+
+module.exports.config = {
+  name: "زوجني",
+  version: "2.2",
+  hasPermssion: 0,
+  credits: "Rako San ",
+  description: "زواج عشوائي أو موجه حسب الرد",
+  commandCategory: "صــــــور",
+  usages: "زوجني أو رد على شخص ثم اكتب: زوجني",
+  cooldowns: 10
+};
 
 const backgrounds = [
   "https://i.postimg.cc/wjJ29HRB/background1.png",
@@ -9,93 +20,116 @@ const backgrounds = [
   "https://i.postimg.cc/5tXRQ46D/background3.png"
 ];
 
-export const config = {
-  name: "زوجني",
-  version: "1.0.1-xaviabot-canvas",
-  description: "زواج عشوائي بينك وبين أحد أعضاء المجموعة",
-  cooldown: 15
-};
-
+// ✅ دالة جلب صورة البروفايل بدون توكن
 async function getAvatarUrl(userID) {
-  if (isNaN(userID)) throw new Error(`❌ userID غير صالح: ${userID}`);
   try {
     const user = await axios.post(`https://www.facebook.com/api/graphql/`, null, {
       params: {
         doc_id: "5341536295888250",
-        variables: JSON.stringify({ height: 500, scale: 1, userID, width: 500})
+        variables: JSON.stringify({ height: 400, scale: 1, userID, width: 400})
 }
 });
     return user.data.data.profile.profile_picture.uri;
-} catch {
+} catch (err) {
     return "https://i.ibb.co/bBSpr5v/143086968-2856368904622192-1959732218791162458-n.png";
 }
 }
 
-export async function onCall({ message}) {
+module.exports.run = async function({ api, event, Users}) {
+  const { threadID, messageID, senderID, messageReply} = event;
+
   try {
-    const { participantIDs, senderID} = message;
-    const botID = api.getCurrentUserID();
-    const listUserID = participantIDs.filter(ID => ID!== botID && ID!== senderID);
+    const threadInfo = await api.getThreadInfo(threadID);
+    const senderInfo = threadInfo.userInfo.find(u => u.id === senderID);
+    const senderGender = senderInfo?.gender || "UNKNOWN";
 
-    if (listUserID.length === 0) return message.reply("ما في حد تتزوجه يا زاحف 😅");
+    let groomID = senderID;
+    let brideID;
+    let name1, name2;
 
-    const matchID = listUserID[Math.floor(Math.random() * listUserID.length)];
-    const matchRate = Math.floor(Math.random() * 101);
+    if (messageReply) {
+      brideID = messageReply.senderID;
+      if (brideID === groomID) return api.sendMessage("😂 ما بتقدر تعرس نفسك يا زول!", threadID, messageID);
 
-    const senderName = await global.controllers.Users.getName(senderID);
-    const matchName = await global.controllers.Users.getName(matchID);
+      const targetInfo = threadInfo.userInfo.find(u => u.id === brideID);
+      const targetGender = targetInfo?.gender || "UNKNOWN";
 
-    const mentions = [
-      { id: senderID, tag: senderName},
-      { id: matchID, tag: matchName}
-    ];
+      if (senderGender === "FEMALE" && targetGender === "FEMALE") {
+        return api.sendMessage("😳 ما تخجلي يا بت الناس دايرة تعرسي بت؟ 🙂💔", threadID, messageID);
+}
 
-    const senderAvatarUrl = await getAvatarUrl(senderID);
-    const matchAvatarUrl = await getAvatarUrl(matchID);
+      if (senderGender === "MALE" && targetGender === "MALE") {
+        return api.sendMessage("😐 يا زول استهد بالله لسنا قوم لوط،* 🙂💔", threadID, messageID);
+}
 
-    const senderAvatarPath = join(global.cachePath, `marry_${senderID}_${Date.now()}.png`);
-    const matchAvatarPath = join(global.cachePath, `marry_${matchID}_${Date.now()}.png`);
+      name1 = await Users.getNameUser(groomID);
+      name2 = await Users.getNameUser(brideID);
+} else {
+      const females = threadInfo.userInfo.filter(
+        mem => mem.gender === "FEMALE" && mem.id!== groomID &&!mem.isSubscribed
+);
+      if (!females.length) return api.sendMessage("مافي بنات في القروب 😅", threadID, messageID);
 
-    await global.downloadFile(senderAvatarPath, senderAvatarUrl);
-    await global.downloadFile(matchAvatarPath, matchAvatarUrl);
+      const bride = females[Math.floor(Math.random() * females.length)];
+      brideID = bride.id;
+      name1 = await Users.getNameUser(groomID);
+      name2 = bride.name;
+}
 
-    const backgroundURL = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-    const backgroundPath = join(global.cachePath, `marry_bg_${Date.now()}.png`);
-    await global.downloadFile(backgroundPath, backgroundURL);
+    const imgDir = path.join(__dirname, "tmp");
+    fs.ensureDirSync(imgDir);
+    const imgPath1 = path.join(imgDir, `${groomID}.jpg`);
+    const imgPath2 = path.join(imgDir, `${brideID}.jpg`);
 
-    const bg = await loadImage(backgroundPath);
-    const avatar1 = await loadImage(senderAvatarPath);
-    const avatar2 = await loadImage(matchAvatarPath);
+    const avatarURL1 = await getAvatarUrl(groomID);
+    const avatarURL2 = await getAvatarUrl(brideID);
 
-    const canvas = createCanvas(bg.width, bg.height);
+    const res1 = await axios.get(avatarURL1, { responseType: "arraybuffer"});
+    const res2 = await axios.get(avatarURL2, { responseType: "arraybuffer"});
+    fs.writeFileSync(imgPath1, Buffer.from(res1.data, "binary"));
+    fs.writeFileSync(imgPath2, Buffer.from(res2.data, "binary"));
+
+    const img1 = await loadImage(imgPath1);
+    const img2 = await loadImage(imgPath2);
+    const bgURL = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+    const background = await loadImage(bgURL);
+
+    const canvas = createCanvas(700, 400);
     const ctx = canvas.getContext("2d");
 
-    ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img1, 40, 100, 200, 200); // العريس
+    ctx.drawImage(img2, 460, 100, 200, 200); // العروس
 
-    const avatarSize = 250;
-    const margin = 60;
-    const centerY = canvas.height / 2 - avatarSize / 2;
+    const finalImg = path.join(imgDir, `zawaj_${groomID}_${brideID}.jpg`);
+const out = fs.createWriteStream(finalImg);
+    const stream = canvas.createJPEGStream();
+    stream.pipe(out);
 
-    ctx.drawImage(avatar1, canvas.width / 2 - avatarSize - margin, centerY, avatarSize, avatarSize);
-    ctx.drawImage(avatar2, canvas.width / 2 + margin, centerY, avatarSize, avatarSize);
+    await new Promise(resolve => out.on("finish", resolve));
 
-    const finalPath = join(global.cachePath, `marry_final_${Date.now()}.png`);
-    fs.writeFileSync(finalPath, canvas.toBuffer("image/png"));
+    const msg = `════════════════\n
+مبروك للعريس _${name1}_
+وعروسته الجميلة _${name2}_ ❤️
 
-    const messageBody = `💍 تم عقد قران الزاحفين (๑°3°๑)!\nنتمنى لكم حياة سعيدة مليئة بالحب والهموم ヽ(*´з｀*)ﾉ\n\n❤️ نسبة التوافق: ${matchRate}%\n👫 ${senderName} + ${matchName}`;
+نتمنى لكم حياة مليانة فرح وسعادة! 🎉💐
+\n════════════════`;
 
-    await message.reply({
-      body: messageBody,
-      mentions,
-      attachment: fs.createReadStream(finalPath)
-});
+    api.sendMessage({
+      body: msg,
+      attachment: fs.createReadStream(finalImg),
+      mentions: [
+        { tag: name1, id: groomID},
+        { tag: name2, id: brideID}
+      ]
+}, threadID, () => {
+      fs.unlinkSync(imgPath1);
+      fs.unlinkSync(imgPath2);
+      fs.unlinkSync(finalImg);
+}, messageID);
 
-    global.deleteFile(senderAvatarPath);
-    global.deleteFile(matchAvatarPath);
-    global.deleteFile(backgroundPath);
-    global.deleteFile(finalPath);
-} catch (error) {
-    console.error(error);
-    message.reply("حدث خطأ أثناء تنفيذ الزواج 💔");
+} catch (err) {
+    console.error("❌ خطأ في أمر زوجني:", err.message);
+    api.sendMessage("😔 حصل خطأ أثناء تنفيذ الزواج الأشواعي.", threadID, messageID);
 }
-}
+};
