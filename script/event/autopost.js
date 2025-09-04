@@ -1,5 +1,5 @@
 module.exports["config"] = {
-    name: "autopost",
+   // name: "autopost",
     version: "1.0.0",
     credits: "Rako San",
 };

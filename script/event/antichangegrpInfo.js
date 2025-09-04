@@ -16,7 +16,7 @@ if (fs.existsSync(activeGroupsFilePath)) {
 }
 
 module.exports.config = {
-  name: "antichanget",
+  //name: "antichanget",
   eventType: [
     "log:thread-name",
     "log:thread-image",

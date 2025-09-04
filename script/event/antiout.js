@@ -1,5 +1,5 @@
 module.exports.config = {
-  name: "antiout", // اسم الوحدة
+// name: "antiout", // اسم الوحدة
   eventType: ["log:unsubscribe"], // نوع الحدث
   version: "0.0.1", // الإصدار
   credits: "MIRAI-BOT", // الائتمان

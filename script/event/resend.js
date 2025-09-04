@@ -1,5 +1,5 @@
 module.exports.config = {
-    name: "resend",
+    //name: "resend",
     version: "1.0.0",
 };
 
