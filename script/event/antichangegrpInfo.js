@@ -1,7 +1,7 @@
 const fs = require("fs-extra");
 const path = require("path");
 
-const activeGroupsFilePath = path.join(__dirname,"groupSettings.json");
+const activeGroupsFilePath = path.join(__dirname, "groupSettings.json");
 const imageBackupDir = path.join(__dirname, "images");
 
 // تحميل إعدادات الحماية
@@ -16,7 +16,7 @@ if (fs.existsSync(activeGroupsFilePath)) {
 }
 
 module.exports.config = {
-  name: "antichange",
+  name: "antichanget",
   eventType: [
     "log:thread-name",
     "log:thread-image",
