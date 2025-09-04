@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <title>RAZER BOT</title>
@@ -14,12 +14,18 @@
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f8f9fa;
+      direction: rtl;
+      text-align: right;
 }
 .sidebar {
-      background-color: #007bff;
+      background: linear-gradient(to bottom, #007bff, #0056b3);
       color: white;
       min-height: 100vh;
       padding-top: 30px;
+      transition: transform 0.3s ease;
+}
+.sidebar.hidden {
+      transform: translateX(100%);
 }
 .sidebar a {
       color: white;
@@ -35,6 +41,11 @@
       font-weight: bold;
       color: #007bff;
       margin-bottom: 20px;
+      animation: fadeInUp 1s ease-out;
+}
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
 }
 .footer {
       background-color: #17a2b8;
@@ -43,13 +54,23 @@
       text-align: center;
       margin-top: 40px;
 }
+    #menuToggle {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 1000;
+}
   </style>
 </head>
 <body>
+  <button class="btn btn-light d-md-none" id="menuToggle">
+    <i class="fas fa-bars"></i>
+  </button>
+
   <div class="container-fluid">
     <div class="row">
       <!-- Sidebar -->
-      <nav class="col-md-3 sidebar">
+      <nav class="col-md-3 sidebar" id="sidebar">
         <div class="text-center mb-4">
           <i class="fas fa-robot fa-2x"></i>
           <div class="mt-2">RAZER BOT</div>
@@ -88,12 +109,12 @@
           </ul>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4" id="listOfCommands">
           <h5>يرجى اختيار الأوامر:</h5>
           <button class="btn btn-primary mb-2" onclick="selectAllCommands()">تحديد جميع الأوامر</button>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4" id="listOfCommandsEvent">
           <h5>يرجى اختيار أوامر الأحداث:</h5>
           <button class="btn btn-primary mb-2" onclick="selectAllEvents()">تحديد جميع الأحداث</button>
         </div>
@@ -128,6 +149,11 @@
   </div>
 
   <!-- Scripts -->
+  <script>
+    document.getElementById("menuToggle").addEventListener("click", () => {
+      document.getElementById("sidebar").classList.toggle("hidden");
+});
+  </script>
   <script src="script.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
