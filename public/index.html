@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
   <title>RAZER BOT</title>
@@ -11,76 +12,87 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Handjet:wght@100..900&family=Playpen+Sans+Arabic:wght@100..800&display=swap" rel="stylesheet">
+  
   <style>
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f8f9fa;
       direction: rtl;
       text-align: right;
-      
-.handjet-<uniquifier> {
-  font-family: "Handjet", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-  font-variation-settings:
-    "ELGR" 1,
-    "ELSH" 2;
-}
-}
-.sidebar {
-      background: linear-gradient(to bottom, #007bff, #0056b3);
+    }
+    
+    .sidebar {
+        background: linear-gradient(to bottom, #007bff, #0056b3);
       color: white;
       min-height: 100vh;
       padding-top: 30px;
       transition: transform 0.3s ease;
-}
-.sidebar.hidden {
+
+    }
+    
+    .sidebar.hidden {
       transform: translateX(100%);
-}
-.sidebar a {
+    }
+    
+    .sidebar a {
       color: white;
       display: block;
       padding: 10px 20px;
       text-decoration: none;
-}
-.sidebar a:hover {
+      background: #0088FF; 
+      margin-top: 3px;
+    }
+    
+    .sidebar a:hover {
       background-color: #0056b3;
-}
-.header-logo {
+    }
+    
+    .header-logo {
       font-size: 28px;
       font-weight: bold;
       color: #007bff;
       margin-bottom: 20px;
       animation: fadeInUp 1s ease-out;
-}
+    }
+    
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px);}
-      to { opacity: 1; transform: translateY(0);}
-}
-.footer {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .footer {
       background-color: #17a2b8;
       color: white;
       padding: 10px;
       text-align: center;
       margin-top: 40px;
-}
+    }
+    
     #menuToggle {
       position: fixed;
       top: 15px;
       left: 15px;
       z-index: 1000;
-      display: none; 
-}
+      display: none;
+    }
+    h5{
+      font-size: 15px; 
+    }
   </style>
 </head>
+
 <body>
   <button class="btn btn-light d-md-none" id="menuToggle">
     <i class="fas fa-bars"></i>
   </button>
-
+  
   <div class="container-fluid">
     <div class="row">
       <!-- Sidebar -->
@@ -94,20 +106,20 @@
         <a href="/step_by_step_guide">دليل خطوة بخطوة</a>
         <a href="online_user">النشطون</a>
       </nav>
-
+      
       <!-- Main Content -->
       <main class="col-md-9 p-4">
         <h2 class="header-logo text-center">RAZER BOT</h2>
-
+        
         <form id="json-form" onsubmit="submitForm(event)">
           <div class="form-group">
             <label for="json-data">أدخل الكوكيز الخاصة بك:</label>
             <textarea id="json-data" class="form-control" rows="5" placeholder=""></textarea>
           </div>
         </form>
-
+        
         <p class="mt-3">مرحبًا! ابدأ بإدخال الكوكيز الخاصة بك. ثم مرر للأسفل لمراجعة الشروط وسياسة الخصوصية بعناية.</p>
-
+        
         <div class="bg-white p-3 rounded shadow-sm mt-4">
           <h5 class="text-info">الشروط والأحكام وسياسة الخصوصية</h5>
           <ul>
@@ -122,55 +134,65 @@
             <li>شروط الخدمة: الالتزام بشروط منصة الاستضافة.</li>
           </ul>
         </div>
-
+        
         <div class="mt-4" id="listOfCommands">
           <h5>يرجى اختيار الأوامر:</h5>
           <button class="btn btn-primary mb-2" onclick="selectAllCommands()">تحديد جميع الأوامر</button>
         </div>
-
+        
         <div class="mt-4" id="listOfCommandsEvent">
           <h5>يرجى اختيار أوامر الأحداث:</h5>
           <button class="btn btn-primary mb-2" onclick="selectAllEvents()">تحديد جميع الأحداث</button>
         </div>
-
+        
+        <div class="mt-4">
+          <h5>اسم البوت ادخل اسم بدون زخرفة مثل سيم او سمسم عشان بنستخدمو لبعض الاوامر</h5>
+          <input type="text" id="inputOfBotName" class="form-control" placeholder="مثال: مشمشة او ممكن تكتب عيشة او قرقوشة عادي 🐸">
+        </div>
+        
+        <div class="mt-4">
+          <h5>اسم مشرف البوت:</h5>
+          <input type="text" id="inputOfAdminName" class="form-control" placeholder="مثال: راكو">
+        </div>
         <div class="mt-4">
           <h5>البادئة (اختياري):</h5>
           <input type="text" id="inputOfPrefix" class="form-control">
         </div>
-
+        
         <div class="mt-4">
           <h5>معرف الأدمن (اختياري):</h5>
           <input type="text" id="inputOfAdmin" class="form-control">
         </div>
-
+        
         <div class="form-check mt-4">
-          <input type="checkbox" class="form-check-input" id="agreeCheckbox">
-          <label class="form-check-label" for="agreeCheckbox">تحديد هذا المربع يعني أنك قرأت وفهمت ووافقت على الشروط والأحكام.</label>
+          <input type="checkbox" class=" form-check-input" id="agreeCheckbox">
+          <label class="mr-4 form-check-label" for="agreeCheckbox">تحديد هذا المربع يعني أنك قرأت وفهمت ووافقت على الشروط والأحكام.</label>
         </div>
-
+        
         <div class="text-center mt-4">
-          <button class="btn btn-info btn-block" onclick="State()" disabled id="submitButton">إرسال</button>
+          <button class="btn btn-primary btn-block" onclick="State()" disabled id="submitButton">تشغيل </button>
         </div>
-
+        
         <div id="result" class="mt-4 text-center" style="display: none;"></div>
       </main>
     </div>
   </div>
-
+  
   <div class="footer">
     الوقت: <span id="time"></span> | الاستجابة: <span id="ping"></span><br>
     تم تطويره بواسطة Rako San
   </div>
-
+  
   <!-- Scripts -->
   <script>
     document.getElementById("menuToggle").addEventListener("click", () => {
       document.getElementById("sidebar").classList.toggle("hidden");
-});
+    });
   </script>
   <script src="script.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
