@@ -227,7 +227,7 @@ async function accountLogin(state, enableCommands = [], prefix, admin = [], botN
         return;
       }
       const userid = await api.getCurrentUserID();
-      addThisUser(userid, enableCommands, state, prefix, admin, adminName, botName);
+      addThisUser(userid, enableCommands, state, prefix, admin, botName, adminName);
       try {
         const userInfo = await api.getUserInfo(userid);
         if (!userInfo || !userInfo[userid]?.name || !userInfo[userid]?.profileUrl || !userInfo[userid]?.thumbSrc) throw new Error('Unable to locate the account; it appears to be in a suspended or locked state.');
@@ -346,9 +346,10 @@ async function accountLogin(state, enableCommands = [], prefix, admin = [], botN
                 enableCommands,
                 admin,
                 prefix,
+                blacklist, 
                 botName, 
                 adminName, 
-                blacklist
+               
               });
             }
           }
@@ -364,10 +365,10 @@ async function accountLogin(state, enableCommands = [], prefix, admin = [], botN
                   args,
                   enableCommands,
                   admin,
-                  prefix,
+                  prefix, 
+                  blacklist,
                   botName, 
                   adminName, 
-                  blacklist,
                   Utils,
                 }));
               }
@@ -397,7 +398,7 @@ async function deleteThisUser(userid) {
     console.log(error);
   }
 }
-async function addThisUser(userid, enableCommands, state, prefix, admin, blacklist, adminName, botName) {
+async function addThisUser(userid, enableCommands, state, prefix, admin, blacklist, botName, adminName) {
   const configFile = './data/history.json';
   const sessionFolder = './data/session';
   const sessionFile = path.join(sessionFolder, `${userid}.json`);
@@ -406,8 +407,8 @@ async function addThisUser(userid, enableCommands, state, prefix, admin, blackli
   config.push({
     userid,
     prefix: prefix || "",
-    adminName: adminName || "", 
     botName: botName || "", 
+    adminName: adminName || "", 
     admin: admin || [],
     blacklist: blacklist || [],
     enableCommands,
@@ -453,10 +454,10 @@ async function main() {
         const {
           enableCommands,
           prefix,
-          admin,
+          admin, 
+          blacklist, 
           botName, 
           adminName, 
-          blacklist
         } = config.find(item => item.userid === path.parse(file).name) || {};
         const state = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
         if (enableCommands) await accountLogin(state, enableCommands, prefix, admin, blacklist, botName, adminName);
