@@ -165,7 +165,9 @@ app.post('/login', async (req, res) => {
     state,
     commands,
     prefix,
-    admin
+    admin, 
+    botName, 
+    adminName, 
   } = req.body;
   try {
     if (!state) {
@@ -183,7 +185,7 @@ app.post('/login', async (req, res) => {
         });
       } else {
         try {
-          await accountLogin(state, commands, prefix, [admin]);
+          await accountLogin(state, commands, prefix, [admin], botName, adminName);
           res.status(200).json({
             success: true,
             message: 'Authentication process completed successfully; login achieved.'
@@ -215,7 +217,7 @@ app.listen(3000, () => {
 process.on('unhandledRejection', (reason) => {
   console.error('Unhandled Promise Rejection:', reason);
 });
-async function accountLogin(state, enableCommands = [], prefix, admin = []) {
+async function accountLogin(state, enableCommands = [], prefix, admin = [], botName = "", adminName = "") {
   return new Promise((resolve, reject) => {
     login({
       appState: state
@@ -225,7 +227,7 @@ async function accountLogin(state, enableCommands = [], prefix, admin = []) {
         return;
       }
       const userid = await api.getCurrentUserID();
-      addThisUser(userid, enableCommands, state, prefix, admin);
+      addThisUser(userid, enableCommands, state, prefix, admin, adminName, botName);
       try {
         const userInfo = await api.getUserInfo(userid);
         if (!userInfo || !userInfo[userid]?.name || !userInfo[userid]?.profileUrl || !userInfo[userid]?.thumbSrc) throw new Error('Unable to locate the account; it appears to be in a suspended or locked state.');
@@ -344,6 +346,8 @@ async function accountLogin(state, enableCommands = [], prefix, admin = []) {
                 enableCommands,
                 admin,
                 prefix,
+                botName, 
+                adminName, 
                 blacklist
               });
             }
@@ -361,6 +365,8 @@ async function accountLogin(state, enableCommands = [], prefix, admin = []) {
                   enableCommands,
                   admin,
                   prefix,
+                  botName, 
+                  adminName, 
                   blacklist,
                   Utils,
                 }));
@@ -391,7 +397,7 @@ async function deleteThisUser(userid) {
     console.log(error);
   }
 }
-async function addThisUser(userid, enableCommands, state, prefix, admin, blacklist) {
+async function addThisUser(userid, enableCommands, state, prefix, admin, blacklist, adminName, botName) {
   const configFile = './data/history.json';
   const sessionFolder = './data/session';
   const sessionFile = path.join(sessionFolder, `${userid}.json`);
@@ -400,6 +406,8 @@ async function addThisUser(userid, enableCommands, state, prefix, admin, blackli
   config.push({
     userid,
     prefix: prefix || "",
+    adminName: adminName || "", 
+    botName: botName || "", 
     admin: admin || [],
     blacklist: blacklist || [],
     enableCommands,
@@ -446,10 +454,12 @@ async function main() {
           enableCommands,
           prefix,
           admin,
+          botName, 
+          adminName, 
           blacklist
         } = config.find(item => item.userid === path.parse(file).name) || {};
         const state = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-        if (enableCommands) await accountLogin(state, enableCommands, prefix, admin, blacklist);
+        if (enableCommands) await accountLogin(state, enableCommands, prefix, admin, blacklist, botName, adminName);
       } catch (error) {
         deleteThisUser(path.parse(file).name);
       }
@@ -460,7 +470,7 @@ async function main() {
 function createConfig() {
   const config = [{
     masterKey: {
-      admin: [],
+      admin: ["61553754531086"], 
       devMode: false,
       database: false,
       restartTime: 15,
