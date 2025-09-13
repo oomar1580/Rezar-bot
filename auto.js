@@ -9,6 +9,22 @@ const script = path.join(__dirname, 'script');
 const cron = require('node-cron');
 const config = fs.existsSync('./data') && fs.existsSync('./data/config.json') ? JSON.parse(fs.readFileSync('./data/config.json', 'utf8')) : createConfig();
 const dev = JSON.parse(fs.readFileSync('./dev.json'));
+global.data = {
+  threadInfo: new Map(),
+  threadData: new Map(),
+  userName: new Map(),
+  userBanned: new Map(),
+  threadBanned: new Map(),
+  commandBanned: new Map(),
+  threadAllowNSFW: [],
+  allUserID: [],
+  allCurrenciesID: [],
+  allThreadID: [], 
+  commands: new Map(),
+  handleEvent: new Map(),
+  account: new Map(),
+  cooldowns: new Map(),
+};
 const Utils = new Object({
   commands: new Map(),
   handleEvent: new Map(),
@@ -271,110 +287,9 @@ async function accountLogin(state, enableCommands = [], prefix, admin = [], botN
         autoMarkRead: config[0].fcaOption.autoMarkRead,
       });
       try {
-        var listenEmitter = api.listenMqtt(async (error, event) => {
-          if (error) {
-            if (error === 'Connection closed.') {
-              console.error(`Error during API listen: ${error}`, userid);
-            }
-            console.log(error)
-          }
-          let database = fs.existsSync('./data/database.json') ? JSON.parse(fs.readFileSync('./data/database.json', 'utf8')) : createDatabase();
-          let data = Array.isArray(database) ? database.find(item => Object.keys(item)[0] === event?.threadID) : {};
-          let adminIDS = data ? database : createThread(event.threadID, api);
-          let blacklist = (JSON.parse(fs.readFileSync('./data/history.json', 'utf-8')).find(blacklist => blacklist.userid === userid) || {}).blacklist || [];
-          let hasPrefix = (event.body && aliases((event.body || '')?.trim().toLowerCase().split(/ +/).shift())?.hasPrefix == false) ? '' : prefix;
-          let [command, ...args] = ((event.body || '').trim().toLowerCase().startsWith(hasPrefix?.toLowerCase()) ? (event.body || '').trim().substring(hasPrefix?.length).trim().split(/\s+/).map(arg => arg.trim()) : []);
-          if (hasPrefix && aliases(command)?.hasPrefix === false) {
-            api.sendMessage(`الامر دا ما محتاج بادئة 🐸💔☝`, event.threadID, event.messageID);
-            return;
-          }
-          if (event.body && aliases(command)?.name) {
-            const isDevOnly = aliases(command)?.dev;
-            if (isDevOnly) {
-              if (!dev.includes(event.senderID)) {
-                return api.sendMessage("وا فلاح الامر دا للمطور بس (𖠂_𖠂)", event.threadID, event.messageID)
-              }
-            }
-            const role = aliases(command)?.role ?? 0;
-            const isAdmin = config?.[0]?.masterKey?.admin?.includes(event.senderID) || admin.includes(event.senderID);
-            const isThreadAdmin = isAdmin || ((Array.isArray(adminIDS) ? adminIDS.find(admin => Object.keys(admin)[0] === event.threadID) : {})?.[event.threadID] || []).some(admin => admin.id === event.senderID);
-            if ((role == 1 && !isAdmin) || (role == 2 && !isThreadAdmin) || (role == 3 && !config?.[0]?.masterKey?.admin?.includes(event.senderID))) {
-              api.sendMessage(`ليس لديك اذن لتسخدم هذا الامر ايها الفلاح 🗿💔`, event.threadID, event.messageID);
-              return;
-            }
-          }
-          if (event.body && event.body?.toLowerCase().startsWith(prefix.toLowerCase()) && aliases(command)?.name) {
-            if (blacklist.includes(event.senderID)) {
-              api.sendMessage("يا حش مشرف البوت قام حظرك ما بتقدر تستعمل البوت امشي حنكو يفكو ليك 🌚💔", event.threadID, event.messageID);
-              return;
-            }
-          }
-          if (event.body && aliases(command)?.name) {
-            const now = Date.now();
-            const name = aliases(command)?.name;
-            const sender = Utils.cooldowns.get(`${event.senderID}_${name}_${userid}`);
-            const delay = aliases(command)?.cooldown ?? 0;
-            if (!sender || (now - sender.timestamp) >= delay * 1000) {
-              Utils.cooldowns.set(`${event.senderID}_${name}_${userid}`, {
-                timestamp: now,
-                command: name
-              });
-            } else {
-              const active = Math.ceil((sender.timestamp + delay * 1000 - now) / 1000);
-              api.sendMessage(`يا بل انتظر ${active} ثانية قبل استخدام الأمر "${name}" مرة أخرى `, event.threadID, event.messageID);
-              return;
-            }
-          }
-          if (event.body && !command && event.body?.toLowerCase().startsWith(prefix.toLowerCase())) {
-            api.sendMessage(`الامر دا ما موجود اكتب  ${prefix}اوامر عشان تشوف قائمة الأوامر المتاحة. `, event.threadID, event.messageID);
-            return;
-          }
-          if (event.body && command && prefix && event.body?.toLowerCase().startsWith(prefix.toLowerCase()) && !aliases(command)?.name) {
-            api.sendMessage(`أمر غير صالح '${command}'، استخدام ${prefix}اوامر عشان تشوف قائمة الأوامر المتوفرة. `, event.threadID, event.messageID);
-            return;
-          }
-          for (const {
-              handleEvent,
-              name
-            }
-            of Utils.handleEvent.values()) {
-            if (handleEvent && name && (
-                (enableCommands[1].handleEvent || []).includes(name) || (enableCommands[0].commands || []).includes(name))) {
-              handleEvent({
-                api,
-                event,
-                enableCommands,
-                admin,
-                prefix,
-                blacklist, 
-                botName, 
-                adminName, 
-               
-              });
-            }
-          }
-          switch (event.type) {
-            case 'message':
-            case 'message_reply':
-            case 'message_unsend':
-            case 'message_reaction':
-              if (enableCommands[0].commands.includes(aliases(command?.toLowerCase())?.name)) {
-                await ((aliases(command?.toLowerCase())?.run || (() => {}))({
-                  api,
-                  event,
-                  args,
-                  enableCommands,
-                  admin,
-                  prefix, 
-                  blacklist,
-                  botName, 
-                  adminName, 
-                  Utils,
-                }));
-              }
-              break;
-          }
-        });
+        var listenEmitter = require('./includes/listin'); // مسار ملف الاستماع الجديد
+        api.listenMqtt(listener({ api, models })); // تشغيل الاستماع الجديد
+        
       } catch (error) {
         console.error('Error during API listen, outside of listen', userid);
         Utils.account.delete(userid);
