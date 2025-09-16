@@ -9,6 +9,12 @@ const script = path.join(__dirname, 'script');
 const cron = require('node-cron');
 const config = fs.existsSync('./data') && fs.existsSync('./data/config.json') ? JSON.parse(fs.readFileSync('./data/config.json', 'utf8')) : createConfig();
 const dev = JSON.parse(fs.readFileSync('./dev.json'));
+const Utils = new Object({
+  commands: new Map(),
+  handleEvent: new Map(),
+  account: new Map(),
+  cooldowns: new Map(),
+});
 global.data = {
   threadInfo: new Map(),
   threadData: new Map(),
@@ -25,12 +31,6 @@ global.data = {
   account: new Map(),
   cooldowns: new Map(),
 };
-const Utils = new Object({
-  commands: new Map(),
-  handleEvent: new Map(),
-  account: new Map(),
-  cooldowns: new Map(),
-});
 fs.readdirSync(script).forEach((file) => {
   const scripts = path.join(script, file);
   const stats = fs.statSync(scripts);
@@ -233,49 +233,52 @@ app.listen(3000, () => {
 process.on('unhandledRejection', (reason) => {
   console.error('Unhandled Promise Rejection:', reason);
 });
+
 async function accountLogin(state, enableCommands = [], prefix, admin = [], botName = "", adminName = "") {
   return new Promise((resolve, reject) => {
-    login({
-      appState: state
-    }, async (error, api) => {
+    login({ appState: state}, async (error, api) => {
       if (error) {
         reject(error);
         return;
-      }
+}
+
       const userid = await api.getCurrentUserID();
       addThisUser(userid, enableCommands, state, prefix, admin, botName, adminName);
+
       try {
         const userInfo = await api.getUserInfo(userid);
-        if (!userInfo || !userInfo[userid]?.name || !userInfo[userid]?.profileUrl || !userInfo[userid]?.thumbSrc) throw new Error('Unable to locate the account; it appears to be in a suspended or locked state.');
-        const {
-          name,
-          profileUrl,
-          thumbSrc
-        } = userInfo[userid];
+        if (!userInfo ||!userInfo[userid]?.name ||!userInfo[userid]?.profileUrl ||!userInfo[userid]?.thumbSrc) {
+          throw new Error('Unable to locate the account; it appears to be in a suspended or locked state.');
+}
+
+        const { name, profileUrl, thumbSrc} = userInfo[userid];
         let time = (JSON.parse(fs.readFileSync('./data/history.json', 'utf-8')).find(user => user.userid === userid) || {}).time || 0;
+
         Utils.account.set(userid, {
           name,
           profileUrl,
           thumbSrc,
           time: time
-        });
+});
+
         const intervalId = setInterval(() => {
           try {
             const account = Utils.account.get(userid);
             if (!account) throw new Error('Account not found');
             Utils.account.set(userid, {
-              ...account,
+...account,
               time: account.time + 1
-            });
-          } catch (error) {
+});
+} catch (error) {
             clearInterval(intervalId);
             return;
-          }
-        }, 1000);
-      } catch (error) {
+}
+}, 1000);
+} catch (error) {
         reject(error);
         return;
-      }
+}
+
       api.setOptions({
         listenEvents: config[0].fcaOption.listenEvents,
         logLevel: config[0].fcaOption.logLevel,
@@ -285,21 +288,32 @@ async function accountLogin(state, enableCommands = [], prefix, admin = [], botN
         online: config[0].fcaOption.online,
         autoMarkDelivery: config[0].fcaOption.autoMarkDelivery,
         autoMarkRead: config[0].fcaOption.autoMarkRead,
-      });
+});
+
+      // ✅ استخدام ملف الاستماع الخارجي
       try {
-        var listenEmitter = require('./includes/listin'); // مسار ملف الاستماع الجديد
-        api.listenMqtt(listener({ api, models })); // تشغيل الاستماع الجديد
-        
-      } catch (error) {
-        console.error('Error during API listen, outside of listen', userid);
+        require('./includes/listen.js')({
+          api,
+          userid,
+          enableCommands,
+          admin,
+          prefix,
+          botName,
+          adminName,
+          Utils
+});
+} catch (error) {
+        console.error('Error loading external listener:', error);
         Utils.account.delete(userid);
         deleteThisUser(userid);
         return;
-      }
-      resolve();
-    });
-  });
 }
+
+      resolve();
+});
+});
+}
+
 async function deleteThisUser(userid) {
   const configFile = './data/history.json';
   let config = JSON.parse(fs.readFileSync(configFile, 'utf-8'));
