@@ -2,7 +2,7 @@ const os = require('os');
 const pidusage = require('pidusage');
 
 module.exports.config = {
-		name: "ابتايم",
+		name: "up",
 		version: "1.0.2",
 		role: 0,
 		credits: "Rako San",
