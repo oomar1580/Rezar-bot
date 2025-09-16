@@ -2,7 +2,7 @@ module.exports.config = {
   name: "البادئة",
   version: "1.0.0",
   hasPermssion: 0,
-  credits: "Rako San",
+  credits: "miko BOT",
   description: "عرض تفاصيل البادئة المستخدمة",
   commandCategory: "إداري",
   usages: "",
