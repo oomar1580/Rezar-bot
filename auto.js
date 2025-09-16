@@ -278,21 +278,6 @@ async function accountLogin(state, enableCommands = [], prefix, admin = [], botN
             }
             console.log(error)
           }
-          
-  // ✅ تضمين handleReply بدون تغيير أي من الكود الأصلي
-  const handleReply = global.client?.handleReply?.find(h =>
-    h.messageID === event.messageReply?.messageID ||
-    (h.threadID === event.threadID && h.author === event.senderID)
-);
-  if (handleReply) {
-    try {
-      const command = require(path.join(__dirname, 'modules', `${handleReply.name}.js`));
-      await command.handleReply({ api, event, handleReply});
-      return; // نوقف هنا عشان ما ينفذ باقي الكود لو الرد تم التعامل معه
-} catch (err) {
-      console.error("❌ خطأ في handleReply:", err.message);
-}
-}
           let database = fs.existsSync('./data/database.json') ? JSON.parse(fs.readFileSync('./data/database.json', 'utf8')) : createDatabase();
           let data = Array.isArray(database) ? database.find(item => Object.keys(item)[0] === event?.threadID) : {};
           let adminIDS = data ? database : createThread(event.threadID, api);
