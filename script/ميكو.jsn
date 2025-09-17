@@ -1,0 +1,33 @@
+const axios = require("axios");
+
+module.exports.config = {
+  name: "ميكو",
+  version: "1.0",
+  hasPermission: 0,
+  credits: "Rako San ",
+  description: "رد ذكي باستخدام نموذج miko من xAI",
+  commandCategory: "زكـــــــاء",
+  usages: "[سؤالك أو طلبك]",
+  cooldowns: 5
+};
+
+module.exports.run = async function({ api, event, args}) {
+  const { threadID, messageID, senderID} = event;
+  const query = args.join(" ").trim();
+
+  if (!query) {
+    return api.sendMessage(" اكتب سؤالك أو طلبك من فضلك ☺️🌸", threadID, messageID);
+}
+
+  const url = `https://rapido.zetsu.xyz/api/grok?query=${encodeURIComponent(query)}&uid=${senderID}`;
+
+  try {
+    const res = await axios.get(url);
+    const reply = res.data?.response || "لم افهم سؤالك عزيزي هل يمكنك توضيح اكثر لنمرح ☺️🌸";
+
+    return api.sendMessage(reply, threadID, messageID);
+} catch (err) {
+    console.error("❌ خطأ في الاتصال بـ miko:", err.message);
+    return api.sendMessage("⚠️ حصلت مشكلة في الرد، جرب لاحقًا.", threadID, messageID);
+}
+};
