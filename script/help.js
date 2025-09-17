@@ -36,7 +36,7 @@ botName,
         helpMessage += `〖${i + 1}〗│←› ${prefix}${commands[i]}\n`;
 }
 
-      helpMessage += `◈ ─────────────── ◈\nصفحة ${page}/${totalPages}. لعرض صفحة أخرى، اكتب '${prefix}اوامر رقم الصفحة'. لعرض معلومات أمر معين، اكتب '${prefix}اوامر اسم الأمر\n اسم المشرف : ${adminName} \n اسم البوت  :  ${botName} '. \n◈ ─────────────── ◈`;
+      helpMessage += `◈ ─────────────── ◈│←›\nصفحة ${page}/${totalPages}. لعرض صفحة أخرى، اكتب '${prefix}اوامر رقم الصفحة'. لعرض معلومات أمر معين، اكتب '${prefix}اوامر اسم الأمر\n اسم المشرف : ${adminName} \n اسم البوت  :  ${botName} '. \n◈ ─────────────── ◈`;
       return api.sendMessage(helpMessage, event.threadID, event.messageID);
 }
 
@@ -54,7 +54,7 @@ botName,
         helpMessage += `〖${i + 1}〗│←›${prefix}${commands[i]}\n`;
 }
 
-      helpMessage += `\n◈ ─────────────── ◈│←›\n │←›  صفحة ❴${page}/${totalPages}❵\n◈ ─────────────── ◈`;
+      helpMessage += `\n◈ ─────────────── ◈\n │←› صفحة ❴${page}/${totalPages}❵\n◈ ─────────────── ◈`;
       return api.sendMessage(helpMessage, event.threadID, event.messageID);
 }
 
@@ -73,16 +73,16 @@ botName,
 } = command;
 
       const roleMessage = role!== undefined? (
-        role ===  '':
-        role ===  '':
-        role === '':
-        role ===  Ξ ᎷᎪᎻᎬᎡ. ぐ愛. ぐ愛'المطور': ''
+        role === 0? '➛ الصلاحية: عضو':
+        role === 1? '➛ الصلاحية: أدمن البوت':
+        role === 2? '➛ الصلاحية: أدمن المجموعة':
+        role === 3? '➛ الصلاحية: المطور الأعلى': ''
 ): '';
 
       const aliasesMessage = aliases.length? `➛ الأسماء البديلة: ${aliases.join(', ')}\n`: '';
       const descriptionMessage = description? `➛ الوصف: ${description}\n`: '';
       const usageMessage = usage? `➛ الاستخدام: ${usage}\n`: '';
-      const creditsMessage = credits? `Ξ ᎷᎪᎻᎬᎡ. ぐ愛: ${credits}\n`: '';
+      const creditsMessage = credits? `➛ المطور: ${credits}\n`: '';
       const versionMessage = version? `➛ الإصدار: ${version}\n`: '';
       const cooldownMessage = cooldown? `➛ التبريد: ${cooldown} ثانية\n`: '';
 
