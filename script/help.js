@@ -1,8 +1,10 @@
 module.exports.config = {
+  name: 'اوامر',
+  version: '1.0.0',
   role: 0,
   hasPrefix: true,
   aliases: ['معلومات'],
-  description: "اوامر",
+  description: "دليل المبتدئين",
   usage: "اوامر [رقم الصفحة] أو [اسم الأمر]",
   credits: 'Rako San',
 };
@@ -13,7 +15,9 @@ module.exports.run = async function({
   enableCommands,
   args,
   Utils,
-  prefix
+  prefix, 
+adminName, 
+botName, 
 }) {
   const input = args.join(' ').trim().toLowerCase();
   const commands = enableCommands[0].commands;
@@ -32,7 +36,7 @@ module.exports.run = async function({
         helpMessage += `〖${i + 1}〗│←› ${prefix}${commands[i]}\n`;
 }
 
-      helpMessage += `◈ ─────────────── ◈\nصفحة ${page}/${totalPages}. لعرض صفحة أخرى، اكتب '${prefix}اوامر رقم الصفحة'. لعرض معلومات أمر معين، اكتب '${prefix}اوامر اسم الأمر'. \n◈ ─────────────── ◈`;
+      helpMessage += `◈ ─────────────── ◈\nصفحة ${page}/${totalPages}. لعرض صفحة أخرى، اكتب '${prefix}اوامر رقم الصفحة'. لعرض معلومات أمر معين، اكتب '${prefix}اوامر اسم الأمر\n اسم المشرف : ${adminName} \n اسم البوت  :  ${botName} '. \n◈ ─────────────── ◈`;
       return api.sendMessage(helpMessage, event.threadID, event.messageID);
 }
 
@@ -47,10 +51,10 @@ module.exports.run = async function({
 
       let helpMessage = `◈ ─────────────── ◈\n\n`;
       for (let i = start; i < Math.min(end, commands.length); i++) {
-        helpMessage += `〖${i + 1}〗 │←›${prefix}${commands[i]}\n`;
+        helpMessage += `〖${i + 1}〗│←›${prefix}${commands[i]}\n`;
 }
 
-      helpMessage += `\n◈ ─────────────── ◈\n │←›  صفحة ❴${page}/${totalPages}❵\n◈ ─────────────── ◈`;
+      helpMessage += `\n◈ ─────────────── ◈│←›\n │←›  صفحة ❴${page}/${totalPages}❵\n◈ ─────────────── ◈`;
       return api.sendMessage(helpMessage, event.threadID, event.messageID);
 }
 
@@ -106,4 +110,3 @@ module.exports.handleEvent = async function({
     api.sendMessage(message, threadID, messageID);
 }
 };
-
