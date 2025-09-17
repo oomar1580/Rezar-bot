@@ -3,7 +3,7 @@ const path = require("path");
 const axios = require("axios");
 
 module.exports.config = {
-  name: 'شيل',
+  name: 'فرز',
   version: '1.0.0',
   role: 2,
   hasPrefix: true,
@@ -17,14 +17,14 @@ let currentDir = __dirname;
 
 module.exports.run = async function({ api, event, args}) {
   const { senderID, threadID, messageID} = event;
-  if (senderID!== "61553754531086") return api.sendMessage("❌ المطور فقط يقدر يستخدم الأمر", threadID, messageID);
+  if (senderID!== "61576232405796") return api.sendMessage("❌ المطور فقط يقدر يستخدم الأمر", threadID, messageID);
 
   const cmd = args[0];
   const log = msg => api.sendMessage(msg, threadID, messageID);
   const file = name => path.join(currentDir, name);
 
   if (!cmd) return log(
-    `🛠️ أوامر شيل:\n` +
+    ` أوامر فرز:\n` +
     `• ls — عرض الملفات\n• get — عرض أو إرسال ملف\n• del — حذف\n• mkdir — إنشاء مجلد\n• rename — إعادة تسمية\n` +
     `• write — كتابة\n• cr — إنشاء ملف\n• cd — تغيير مجلد\n• info — تفاصيل ملف\n• search — بحث داخل ملف\n` +
     `• recent — أحدث الملفات\n• tree — عرض هيكل\n• edit — تعديل سطر\n• run — تنفيذ ملف\n• fetch — تحميل من رابط\n\n📁 ${currentDir}`
