@@ -31,7 +31,7 @@ botName,
       const start = (page - 1) * perPage;
       const end = start + perPage;
 
-      let helpMessage = `◈ ─────────────── ◈\n\n`;
+      let helpMessage = `◈ ───『قائمة الاوامر』─── ◈\n\n`;
       for (let i = start; i < Math.min(end, commands.length); i++) {
         helpMessage += `〖${i + 1}〗│←› ${prefix}${commands[i]}\n`;
 }
@@ -73,16 +73,16 @@ botName,
 } = command;
 
       const roleMessage = role!== undefined? (
-        role === 0? '➛ الصلاحية: عضو':
-        role === 1? '➛ الصلاحية: أدمن البوت':
-        role === 2? '➛ الصلاحية: أدمن المجموعة':
-        role === 3? '➛ الصلاحية: المطور الأعلى': ''
+        role ===  '':
+        role ===  '':
+        role === '':
+        role ===  Ξ ᎷᎪᎻᎬᎡ. ぐ愛. ぐ愛'المطور': ''
 ): '';
 
       const aliasesMessage = aliases.length? `➛ الأسماء البديلة: ${aliases.join(', ')}\n`: '';
       const descriptionMessage = description? `➛ الوصف: ${description}\n`: '';
       const usageMessage = usage? `➛ الاستخدام: ${usage}\n`: '';
-      const creditsMessage = credits? `➛ المطور: ${credits}\n`: '';
+      const creditsMessage = credits? `Ξ ᎷᎪᎻᎬᎡ. ぐ愛: ${credits}\n`: '';
       const versionMessage = version? `➛ الإصدار: ${version}\n`: '';
       const cooldownMessage = cooldown? `➛ التبريد: ${cooldown} ثانية\n`: '';
 
