@@ -11,7 +11,7 @@ module.exports.config = {
 };
 
 module.exports.run = async ({ api, event, args}) => {
-    const المطور = ['61553754531086'];
+    const المطور = ['61576232405796'];
 
     if (!المطور.includes(event.senderID)) {
         return api.sendMessage("❌ ليس لديك صلاحية استخدام هذا الأمر.", event.threadID);
