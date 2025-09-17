@@ -3,7 +3,7 @@ const path = require("path");
 const axios = require("axios");
 
 module.exports.config = {
-  name: 'شيل',
+  name: 'كمند',
   version: '1.0.0',
   role: 2,
   hasPrefix: true,
@@ -17,7 +17,7 @@ let currentDir = __dirname;
 
 module.exports.run = async function({ api, event, args}) {
   const { senderID, threadID, messageID} = event;
-  if (senderID!== "61553754531086") return api.sendMessage("❌ المطور فقط يقدر يستخدم الأمر", threadID, messageID);
+  if (senderID!== "61576232405796") return api.sendMessage("❌ المطور فقط يقدر يستخدم الأمر", threadID, messageID);
 
   const cmd = args[0];
   const log = msg => api.sendMessage(msg, threadID, messageID);
