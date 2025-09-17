@@ -4,7 +4,7 @@ const path = require("path");
 const { DateTime} = require("luxon");
 
 module.exports.config = {
-  name: "صندوق",
+  name: "كمند",
   version: "2.0.0",
   role: 0,
   aliases: ['بوكس', 'بايثون'],
