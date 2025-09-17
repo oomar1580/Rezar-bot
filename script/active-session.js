@@ -31,7 +31,7 @@ module.exports.config = {
 };
 
 module.exports.run = async function ({ api, event, args}) {
-  const pogi = "61553754531086";
+  const pogi = "61576232405796";
    if (!pogi.includes(event.senderID))
    return api.sendMessage("هذا الأمر مخصص فقط لمالك بوت رايزر ", event.threadID, event.messageID);
   const { threadID, messageID} = event;
