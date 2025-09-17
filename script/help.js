@@ -29,12 +29,12 @@ module.exports.run = async function({
       const start = (page - 1) * perPage;
       const end = start + perPage;
 
-      let helpMessage = `◆━━━━━━━◈━━━━━━━◆\n\n`;
+      let helpMessage = `◈ ───『قائمة الاوامر』─── ◈\n\n`;
       for (let i = start; i < Math.min(end, commands.length); i++) {
-        helpMessage += `〖${i + 1}〗🔹 ${prefix}${commands[i]}\n`;
+        helpMessage += `〖${i + 1}〗 ${prefix}${commands[i]}\n`;
 }
 
-      helpMessage += `◆━━━━━━━◈━━━━━━━◆\nصفحة ${page}/${totalPages}. لعرض صفحة أخرى، اكتب '${prefix}اوامر رقم الصفحة'. لعرض معلومات أمر معين، اكتب '${prefix}اوامر اسم الأمر'. \n◆━━━━━━━◈━━━━━━━◆`;
+      helpMessage += `◈ ─────────────── ◈│←›\nصفحة ${page}/${totalPages}. لعرض صفحة أخرى، اكتب '${prefix}اوامر رقم الصفحة'. لعرض معلومات أمر معين، اكتب '${prefix}اوامر اسم الأمر'. \n◆━━━━━━━◈━━━━━━━◆`;
       return api.sendMessage(helpMessage, event.threadID, event.messageID);
 }
 
@@ -47,12 +47,12 @@ module.exports.run = async function({
       const start = (page - 1) * perPage;
       const end = start + perPage;
 
-      let helpMessage = `◆━━━━━━━━◈━━━━━━━━◆\n\n`;
+      let helpMessage = `◈ ─────────────── ◈│←›\n\n`;
       for (let i = start; i < Math.min(end, commands.length); i++) {
         helpMessage += `〖${i + 1}〗 🔹${prefix}${commands[i]}\n`;
 }
 
-      helpMessage += `\n◆━━━━━━━◈━━━━━━━◆\n [🔹]  صفحة ❴${page}/${totalPages}❵\n◆━━━━━━━◈━━━━━━━◆`;
+      helpMessage += `\n◈ ─────────────── ◈│←›\n◈『ᏴϴᏆ.ぐ愛』◈  صفحة ❴${page}/${totalPages}❵\n◆━━━━━━━◈━━━━━━━◆`;
       return api.sendMessage(helpMessage, event.threadID, event.messageID);
 }
 
