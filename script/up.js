@@ -2,7 +2,7 @@ const os = require('os');
 const pidusage = require('pidusage');
 
 module.exports.config = {
-		name: "ابتايم",
+		name: "up",
 		version: "1.0.2",
 		role: 0,
 		credits: "Rako San",
@@ -33,7 +33,7 @@ module.exports.run = async ({ api, event}) => {
 		};
 
 		const timeStart = Date.now();
-		const returnResult = `🤖 مدة تشغيل البوت: ${hours} ساعة ${minutes} دقيقة ${seconds} ثانية\n\n❖ استخدام المعالج: ${usage.cpu.toFixed(1)}%\n❖ استخدام الذاكرة: ${byte2mb(usage.memory)}\n❖ عدد الأنوية: ${os.cpus().length}\n❖ سرعة الاستجابة: ${Date.now() - timeStart}ms\n❖ نظام التشغيل: ${osInfo.platform}\n❖ بنية المعالج: ${osInfo.architecture}`;
+		const returnResult = `⌚ ◈『مدة تشغيل البوت』◈: ${hours} ساعة ${minutes} دقيقة ${seconds} ثانية\n\n❖ استخدام المعالج: ${usage.cpu.toFixed(1)}%\n❖ استخدام الذاكرة: ${byte2mb(usage.memory)}\n❖ عدد الأنوية: ${os.cpus().length}\n❖ سرعة الاستجابة: ${Date.now() - timeStart}ms\n❖ نظام التشغيل: ${osInfo.platform}\n❖ بنية المعالج: ${osInfo.architecture}`;
 
 		return api.sendMessage(returnResult, event.threadID, event.messageID);
 };
