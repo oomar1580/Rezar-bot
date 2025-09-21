@@ -16,9 +16,9 @@ node index.js
 ## **📸 Screenshots**  
 
 ![Demo Site](https://i.ibb.co/QFmydx2W/image.jpg)  
-![Chatbot Interaction](https://i.ibb.co/QFmydx2W/image.jpg)  
-![Bot Commands](https://imgur.com/D1SzZhA)  
-![Admin Panel](https://imgur.com/OBkelwn)  
+![Chatbot Interaction](https://i.ibb.co/HQKvh23/image.jpg)  
+![Bot Commands](https://i.ibb.co/67ZSSXCx/image.jpg)  
+![Admin Panel](https://i.ibb.co/prwSHhrX/image.jpg)  
 
 ---
 ## **🔑 Website Login Guide**  
