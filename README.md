@@ -16,14 +16,14 @@ node index.js
 ## **📸 Screenshots**  
 
 ![Demo Site](https://i.imgur.com/6xVENVq.jpeg)  
-![Chatbot Interaction](https://imgur.com/ybriCgR)  
+![Chatbot Interaction](https://i.ibb.co/QFmydx2W/image.jpg)  
 ![Bot Commands](https://imgur.com/D1SzZhA)  
 ![Admin Panel](https://imgur.com/OBkelwn)  
 
 ---
 ## **🔑 Website Login Guide**  
 
-1. **Download [Webvium](https://mrepol742.github.io/webviumdev/) and Install**.  
+1. **Download [Webvium](https://i.ibb.co/QFmydx2W/image.jpg) and Install**.  
 2. Open Webvium and log in to **Facebook** with a dummy account.  
 3. Navigate to **DevTools > Cookie Manager**.  
 4. Copy the Facebook **cookie JSON** and go to your site and paste it into `APPSTATE` container.  
