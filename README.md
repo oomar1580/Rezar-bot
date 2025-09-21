@@ -15,7 +15,7 @@ node index.js
 ```
 ## **📸 Screenshots**  
 
-![Demo Site](https://i.imgur.com/6xVENVq.jpeg)  
+![Demo Site](https://i.ibb.co/QFmydx2W/image.jpg)  
 ![Chatbot Interaction](https://i.ibb.co/QFmydx2W/image.jpg)  
 ![Bot Commands](https://imgur.com/D1SzZhA)  
 ![Admin Panel](https://imgur.com/OBkelwn)  
