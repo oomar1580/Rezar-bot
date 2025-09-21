@@ -1,0 +1,50 @@
+module.exports.config = {
+	name: "ازالا",
+	version: "1.0.0",
+	hasPermssion: 1,
+	credits: "ProCoderMew",
+	description: " ",
+	commandCategory: "𝔸𝔻𝕄𝕀ℕ 𝔾ℝ𝕆𝕌ℙ",
+	usages: "",
+	cooldowns: 300
+};
+
+module.exports.run = async function({ api, event }) {
+    var { userInfo, adminIDs } = await api.getThreadInfo(event.threadID);    
+    var success = 0, fail = 0;
+    var arr = [];
+    for (const e of userInfo) {
+        if (e.gender == undefined) {
+            arr.push(e.id);
+        }
+    };
+
+    adminIDs = adminIDs.map(e => e.id).some(e => e == global.data.botID);
+    if (arr.length == 0) {
+        return api.sendMessage("مڪانش حسبات طايࢪة فلغࢪوب🙃", event.threadID);
+    }
+    else {
+        api.sendMessage("ڪاين" + arr.length + " حسابات طايرة بالغروب .", event.threadID, function () {
+            if (!adminIDs) {
+                api.sendMessage("زت ادمن باش نقدࢪ نصفي حسبات طايࢪة", event.threadID);
+            } else {
+                api.sendMessage("جاࢪي ازلة لقحاب.…", event.threadID, async function() {
+                    for (const e of arr) {
+                        try {
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            await api.removeUserFromGroup(parseInt(e), event.threadID);   
+                            success++;
+                        }
+                        catch {
+                            fail++;
+                        }
+                    }
+                  
+                    api.sendMessage("تمت تصفية  " + success + " أشخاص بنجاح.", event.threadID, function() {
+                        if (fail != 0) return api.sendMessage("- حدث خطاء , لم أتمكن من تصفية " + fail + " أشخاص.", event.threadID);
+                    });
+                })
+            }
+        })
+    }
+}
