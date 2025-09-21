@@ -1,0 +1,40 @@
+const fs = require('fs-extra');
+const path = require('path');
+const axios = require('axios');
+const pathData = path.join(__dirname, '../commands/cache/antiavtbox.json');
+
+module.exports.config = {
+    name: "antiavtbox",
+    eventType: ["log:thread-icon"],
+    version: "1.0.0",
+    credits: "",
+    description: "Ngăn chặn việc thay đổi ảnh đại diện nhóm",
+};
+
+module.exports.run = async function ({ event, api, Threads }) {
+    const { logMessageData, threadID } = event;
+    try {
+        let antiData = await fs.readJSON(pathData);
+        let threadEntry = antiData.find(entry => entry.threadID === threadID);
+        if (!threadEntry) return;
+        const thread = await Threads.getInfo(threadID);
+        const currentImgSrc = thread.imageSrc;
+        if (currentImgSrc !== threadEntry.url) {
+            api.sendMessage("『 ⚠️ 』➤ تم الكشف عن تغيير صورة المجموعة ❌\n➥ جاري استرجاع الصورة الأصلية... 🔄", threadID);
+            try {
+                const response = await axios.get(threadEntry.url, { responseType: 'stream' });
+                await api.changeThreadImage(response.data, threadID, (err) => {
+                    if (err) {
+                        api.sendMessage("『 ⚠️ 』➤ حدث خطأ أثناء استرجاع الصورة ❌", threadID);
+                    } else {
+                        api.sendMessage("『 ✅ 』➤ تم استرجاع صورة المجموعة بنجاح! 🎉", threadID);
+                    }
+                });
+            } catch (error) {
+                api.sendMessage("『 ⚠️ 』➤ فشل في تحميل الصورة الأصلية 📛", threadID);
+            }
+        }
+    } catch (error) {
+        api.sendMessage("『 ⚠️ 』➤ وقع خطأ أثناء معالجة تغيير الصورة 💢", threadID);
+    }
+};
