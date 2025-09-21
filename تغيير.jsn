@@ -1,0 +1,55 @@
+module.exports.config = {
+    name: "جلفاوي",
+    version: "1.0.0",
+    hasPermssion: 2, // أدمن فقط
+    credits: "aziz",
+    description: "تغيير صور جميع المجموعات بالصورة التي ترد عليها",
+    commandCategory: "admin",
+    usages: "تغيير_صور_برد (بالرد على صورة)",
+    cooldowns: 5
+};
+
+module.exports.run = async function ({ api, event }) {
+    const fs = require("fs");
+    const axios = require("axios");
+
+    if (!event.messageReply || !event.messageReply.attachments || event.messageReply.attachments.length === 0) {
+        return api.sendMessage("❌ لازم ترد على صورة!", event.threadID, event.messageID);
+    }
+
+    let attachment = event.messageReply.attachments[0];
+    if (attachment.type !== "photo") {
+        return api.sendMessage("❌ لازم ترد على صورة مش حاجة ثانية!", event.threadID, event.messageID);
+    }
+
+    let imgPath = __dirname + "/temp_group_photo.jpg";
+
+    try {
+        // تحميل الصورة
+        let getImage = await axios.get(attachment.url, { responseType: "arraybuffer" });
+        fs.writeFileSync(imgPath, Buffer.from(getImage.data, "binary"));
+
+        api.sendMessage(`🖼️ جاري تغيير صور جميع المجموعات...`, event.threadID);
+
+        const threads = await api.getThreadList(100, null, ["INBOX"]);
+        let count = 0;
+
+        for (const thread of threads) {
+            if (thread.isGroup) {
+                try {
+                    await api.changeGroupImage(fs.createReadStream(imgPath), thread.threadID);
+                    count++;
+                } catch (err) {
+                    console.error(`فشل تغيير صورة المجموعة ${thread.threadID}`, err);
+                }
+            }
+        }
+
+        fs.unlinkSync(imgPath); // حذف الصورة المؤقتة
+        api.sendMessage(`✅ تم تغيير صور ${count} مجموعة بالصورة الجديدة!`, event.threadID);
+
+    } catch (error) {
+        console.error(error);
+        api.sendMessage("❌ حدث خطأ أثناء تغيير الصور!", event.threadID);
+    }
+};
