@@ -1,17 +1,11 @@
-const fs = require("fs");
-const config = require("../config.json");
-
 module.exports = {
-  name: "تشغيل",
-  description: "تشغيل البوت للمستخدمين العاديين",
-  execute({ api, event }) {
-    const senderID = event.senderID;
-    if (!config.adminIDs.includes(senderID)) return api.sendMessage("🚫 هذا الأمر مخصص للأدمن فقط.", event.threadID);
-
-    if (config.botActive) return api.sendMessage("✅ البوت شغال من قبل.", event.threadID);
-
-    config.botActive = true;
-    fs.writeFileSync('./config.json', JSON.stringify(config, null, 2));
-    api.sendMessage("✅ تم تشغيل البوت. الآن يمكن للجميع استخدامه.", event.threadID);
+  name: 'تشغيل',
+  aliases: ['start', 'on'],
+  description: 'يشغّل خدمة أو يفعّل البوت (للمطور فقط)',
+  permissions: ['61576232405796'],  // فرضًا لديك نظام صلاحيات
+  async execute({ api, event, args }) {
+    // منطق التشغيل الذي تريده
+    api.sendMessage('✅ تم تفعيل البوت أو الخدمة.', event.threadID);
+    // مثلاً: ضبط متغيّر داخلي "isActive = true"
   }
 };
